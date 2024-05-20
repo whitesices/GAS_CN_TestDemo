@@ -27,10 +27,10 @@ protected:
 
 private:
 	
-	UPROPERTY( EditorAnywhere , Category = "Input" )
+	UPROPERTY( EditAnywhere , Category = "Input" )
 	TObjectPtr<UInputMappingContext> RpgContext;//这部门内容其实是吸入IMC
 
-	UPROPERTY( EditorAnywhere ,Category = "Input")
+	UPROPERTY( EditAnywhere ,Category = "Input")
 	TObjectPtr<UInputAction> RpgMoveAction;//这部分是装入IA
 
 	//自定义一个move方法在移动组件中进行调用

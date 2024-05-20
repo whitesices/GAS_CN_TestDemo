@@ -38,9 +38,24 @@ void ACNGasRpgPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(RpgMoveAction , ETriggerEvent::Triggered , this , &ACNGasRpgPlayerController::Move);//可以用ThisClass进行平替
 
 
+
 }
 
 void ACNGasRpgPlayerController::Move(const FInputActionValue& InputActionValue)
 {
+	//获取X轴和Y轴两个方向的数据
 	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>();
+
+	const FRotator Rotation = GetControlRotation();
+
+	const FRotator YawRotation(0.f , Rotation.Yaw , 0.f );
+
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);//X方向
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);//Y方向
+
+	if (APawn* ControlledPawn = GetPawn())
+	{
+		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
+		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
+	}
 }
