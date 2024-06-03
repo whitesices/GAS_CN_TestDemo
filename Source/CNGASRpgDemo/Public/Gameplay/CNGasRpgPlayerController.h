@@ -5,17 +5,19 @@
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
+//#include "Interface/EnemyInterface.h"
 #include "CNGasRpgPlayerController.generated.h"
 //若UInputMappingContext未被识别则表明未引入头文件或者预加载相关选项
 //#include "InputMappingContext.h"
 
 class UInputMappingContext;
 class UInputAction;
+class IEnemyInterface;
 /**
  * 
  */
 UCLASS()
-class CNGASRPGDEMO_API ACNGasRpgPlayerController : public APlayerController
+class CNGASRPGDEMO_API ACNGasRpgPlayerController : public APlayerController /*, public IEnemyInterface*/
 {
 	GENERATED_BODY()
 
@@ -24,6 +26,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void SetupInputComponent() override;
+
+	virtual void PlayerTick(float DeltaTime) override;
 
 private:
 	
@@ -35,5 +39,14 @@ private:
 
 	//自定义一个move方法在移动组件中进行调用
 	void Move( const FInputActionValue& InputActionValue );
+	
+	//自定义一个Cursor函数
+	void CursorTrace();
+
+	//声明两个变量来存储上一个变量和当前变量
+	AActor* LastActor;
+	AActor* CurrentActor;
+
+
 	
 };

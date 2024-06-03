@@ -5,6 +5,7 @@
 //引入增强系统输入头文件
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Interface/EnemyInterface.h"
 
 //class UEnhancedInputComponent;
 
@@ -41,6 +42,13 @@ void ACNGasRpgPlayerController::SetupInputComponent()
 
 }
 
+void ACNGasRpgPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+	//在playerTick中去调用CursorTrace
+	CursorTrace();
+}
+
 void ACNGasRpgPlayerController::Move(const FInputActionValue& InputActionValue)
 {
 	//获取X轴和Y轴两个方向的数据
@@ -58,4 +66,78 @@ void ACNGasRpgPlayerController::Move(const FInputActionValue& InputActionValue)
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
 	}
+}
+
+void ACNGasRpgPlayerController::CursorTrace()
+{
+	//声明一个变量来获取触及的效果
+	FHitResult HitResult;
+
+	GetHitResultUnderCursor(ECC_Visibility , false, HitResult);
+
+	//若反馈结果为空则直接返回
+	if( !HitResult.bBlockingHit ) return;
+	LastActor = CurrentActor;
+	//这里要注意类型的转换
+	CurrentActor =HitResult.GetActor();
+	/*
+	 *1.currentactor为空 lastactor为空
+	 *2.currentactor为空 lastactor不为空 
+	 *3.currentactor为空 ， lastactor为空
+	 * 4.两者都不为空
+	 */
+
+
+	/*if( !LastActor && !CurrentActor )
+	{
+		return;
+	}
+	else if( !LastActor && CurrentActor )
+	{
+		if( CurrentActor->Implements<IEnemyInterface>())
+		{
+			IEnemyInterface::Execute_HighLight(CurrentActor);
+		}
+	}
+	else if (LastActor && !CurrentActor)
+	{
+		if (LastActor->Implements<IEnemyInterface>())
+		{
+			IEnemyInterface::Execute_UnHighLight(LastActor);
+		}
+	}
+	else if (LastActor && CurrentActor)
+	{
+		if (LastActor->Implements<IEnemyInterface>())
+		{
+			IEnemyInterface::Execute_UnHighLight(LastActor);
+		}
+
+		if (CurrentActor->Implements<IEnemyInterface>())
+		{
+			IEnemyInterface::Execute_HighLight(CurrentActor);
+		}
+
+	}*/
+
+	//当当前actor与之前都为空时则直接返回不继续进行接下来的操作
+
+	if (!LastActor && !CurrentActor)
+	{
+		return;
+	}
+	
+	//逻辑优化实则便是 当前Actor有效则执行高亮 ， 之前的Actor有效则执行不高亮
+
+	if ( LastActor && LastActor->Implements<UEnemyInterface>() )
+	{
+		IEnemyInterface::Execute_UnHighLight(LastActor);
+	}
+	
+	if ( CurrentActor && CurrentActor->Implements<UEnemyInterface>() )
+	{
+		IEnemyInterface::Execute_HighLight(CurrentActor);
+	}
+
+	
 }
