@@ -9,7 +9,7 @@ public class CNGASRpgDemo : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		//引入相应的模块
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" , "GameplayAbilities", "GameplayTags", "GameplayTasks" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" , "GameplayAbilities", "GameplayTags", "GameplayTasks","UMG" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

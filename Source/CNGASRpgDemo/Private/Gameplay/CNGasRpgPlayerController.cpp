@@ -17,8 +17,14 @@ void ACNGasRpgPlayerController::BeginPlay()
 	check(RpgContext);
 	//与蓝图中加载增强输入子系统的方式一样
 	UEnhancedInputLocalPlayerSubsystem* EnhancedInputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer() );
-	//将IMC加入增强输入子系统中
-	EnhancedInputSubsystem->AddMappingContext(RpgContext , 0 );
+
+	//2024.0606 由于同时开启客户端和服务端会奔溃 因此要做一个对于SubSystem的判断
+	
+	if (EnhancedInputSubsystem)
+	{
+		//将IMC加入增强输入子系统中
+		EnhancedInputSubsystem->AddMappingContext(RpgContext, 0);
+	}
 	//显示光标的操作 ，其实也可以在蓝图中进行勾选操作
 	bShowMouseCursor = true;
 

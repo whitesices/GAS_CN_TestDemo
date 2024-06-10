@@ -2,6 +2,23 @@
 
 
 #include "Character/CNGasRpgCharacterEnemy.h"
+#include "AbilitySystemComponent/CNAbilitySystemComponent.h"
+#include "AttributeSet/CNAttributeSet.h"
+
+ACNGasRpgCharacterEnemy::ACNGasRpgCharacterEnemy()
+{
+	//创建相应的组件和属性
+	CNAbilitySystemComponent = CreateDefaultSubobject<UCNAbilitySystemComponent>("AbilitySystemComponent");
+	CNAttribuset = CreateDefaultSubobject<UCNAttributeSet>("AttributeSet");
+
+	//打开网络同步
+	CNAbilitySystemComponent->SetIsReplicated(true);
+
+	//AbilitySystemComponent的网络同步模式
+	CNAbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+	
+
+}
 
 void ACNGasRpgCharacterEnemy::HighLight_Implementation()
 {
@@ -21,4 +38,13 @@ void ACNGasRpgCharacterEnemy::UnHighLight_Implementation()
 	GetMesh()->SetCustomDepthStencilValue(0);
 	Weapon->SetRenderCustomDepth(false);
 	Weapon->SetCustomDepthStencilValue(0);
+}
+
+//重载的BeginPlay方法
+void ACNGasRpgCharacterEnemy::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//调用abilitySystemComponent 初始化技能Actor的信息
+	CNAbilitySystemComponent->InitAbilityActorInfo( this , this );
 }
