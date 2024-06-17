@@ -4,7 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+//#include "ActiveGameplayEffectHandle.h"
+#include "ActiveGameplayEffectHandle.h"
 #include "EffectActor.generated.h"
+
+class UAbilitySystemComponent;
+class UGameplayEffect;
+
+
+UENUM( BlueprintType )
+enum class EEffectRemovePolicy : uint8
+{
+	Remove,
+	DoNotRemove
+};
+
 
 UCLASS()
 class CNGASRPGDEMO_API AEffectActor : public AActor
@@ -15,9 +29,12 @@ public:
 	// Sets default values for this actor's properties
 	AEffectActor();
 
-	//×Ô¶¨ÒåÒ»¸öEffectActor½»»¥µÄº¯Êý·½·¨
+	//è‡ªå®šä¹‰ä¸€ä¸ªEffectActoräº¤äº’çš„å‡½æ•°æ–¹æ³•
 	UFUNCTION(BlueprintCallable , Category = "EffectActor")
-	void OnEffectOverlap( AActor* OtherActor);
+	void OnEffectOverlap( AActor* OtherActor , TSubclassOf<UGameplayEffect> EffectToApply );
+
+	UFUNCTION( BlueprintCallable )
+	void RemoveEffect(AActor* OtherActor);
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,5 +43,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	TMap< UAbilitySystemComponent*, FActiveGameplayEffectHandle > ActiveEffectHandleMap;
+
+
+	UPROPERTY( EditAnywhere )
+	EEffectRemovePolicy EffectRemovePolicy;
 
 };

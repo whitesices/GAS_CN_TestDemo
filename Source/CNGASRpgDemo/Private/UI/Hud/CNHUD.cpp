@@ -42,6 +42,13 @@ void ACNHUD::InitWidget(APlayerController* pc, APlayerState* ps, UAbilitySystemC
 	//设置widgetController
 	OverlayWidget->SetWidgetController( WidgetController );
 
+	//在HUD中进行广播相应参数
+	//将Controller层中的数据广播到View层
+	OverlayWidgetController->BroadcastInitialValues();
+
+
+
+
 	//将UI添加到屏幕上
 	Widget->AddToViewport();
 }
@@ -57,6 +64,9 @@ UOverlayWidgetController* ACNHUD::GetOverlayWidgetController(const FWidgetContro
 
 		//调用SetWidgetControllerParams方法并进行赋值
 		OverlayWidgetController->SetWidgetControllerParams(Params);
+
+		//获取OverWidgetController再进行绑定相应依赖
+		OverlayWidgetController->BindCallbackToDepencies();
 	}
 
 

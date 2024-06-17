@@ -14,16 +14,16 @@ class CNGASRPGDEMO_API UCNUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-	//×Ô¶¨ÒåÒ»¸öÉèÖÃWigetControllerµÄº¯Êı
+	//è‡ªå®šä¹‰ä¸€ä¸ªè®¾ç½®WidgetControllerçš„æ–¹æ³•
 	UFUNCTION( BlueprintCallable , Category="CNWdiget")
 	void SetWidgetController(UObject* InWidgetController);
 
-	//ÉùÃ÷Ò»¸öController±äÁ¿
+	//å£°æ˜ä¸€ä¸ªControllerå˜é‡
 	UPROPERTY( BlueprintReadOnly )
 	TObjectPtr<UObject> WidgetController;
 
 protected:
-	//ÉùÃ÷Ò»¸öWidgetControllerº¯Êı
+	//å£°æ˜ä¸€ä¸ªWidgetControllerå‡½æ•°
 	UFUNCTION(BlueprintImplementableEvent)
 	void WidgetControllerSet();
 	

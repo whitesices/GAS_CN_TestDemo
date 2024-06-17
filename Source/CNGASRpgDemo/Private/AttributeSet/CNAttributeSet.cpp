@@ -3,7 +3,7 @@
 
 #include "AttributeSet/CNAttributeSet.h"
 #include "AbilitySystemComponent.h"
-//�����������ͷ�ļ�
+//引入虚幻联网头文件
 #include "Net/UnrealNetwork.h"
 
 UCNAttributeSet::UCNAttributeSet()
@@ -18,12 +18,50 @@ void UCNAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	//֪ͨ��ǰ�Զ������Ե�״̬
+	//通知当前自定义属性的状态
 	DOREPLIFETIME_CONDITION_NOTIFY(UCNAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCNAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCNAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCNAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
 
+}
+
+//重载Attribute预改变
+void UCNAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+{
+	Super::PreAttributeChange(Attribute, NewValue);
+
+	//判断获取的值是否大于最大值
+	if (Attribute == GetHealthAttribute())
+	{
+		//获取最大生命值
+		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
+	}
+
+	if (Attribute == GetManaAttribute())
+	{
+		//获取最大魔法值
+		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxMana()); 
+	}
+
+
+}
+
+//修改BaseValue
+void UCNAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+{
+	/*Super::PostGameplayEffectExecute(Data);*/
+	//设置最大生命值
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		//对基础值的一个前置
+		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()) );
+	}
+
+	if (Data.EvaluatedData.Attribute == GetManaAttribute())
+	{
+		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+	}
 }
 
 void UCNAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth)

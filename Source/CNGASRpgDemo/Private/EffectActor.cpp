@@ -3,9 +3,9 @@
 
 #include "EffectActor.h"
 #include "AbilitySystemInterface.h"
-//ÒıÈë×Ô¶¨ÒåµÄAttributeSet
+//å¼•å…¥è‡ªå®šä¹‰çš„AttributeSet
 #include "AttributeSet/CNAttributeSet.h"
-//ÒıÈëAttributeSetÍ·ÎÄ¼ş
+//å¼•å…¥AttributeSetå¤´æ–‡ä»¶
 #include "AttributeSet.h"
 
 // Sets default values
@@ -16,28 +16,65 @@ AEffectActor::AEffectActor()
 
 }
 
-void AEffectActor::OnEffectOverlap(AActor* OtherActor)
+void AEffectActor::OnEffectOverlap(AActor* OtherActor , TSubclassOf<UGameplayEffect> EffectToApply)
 {
 
-	//µ±Ç°Ê¹ÓÃµÄHackµÄ·½Ê½È¥ĞŞ¸ÄÊôĞÔÖµ £¬ ÕıÈ·µÄ×ö·¨ÊÇÓÃGameplay Effect
-	//ÉùÃ÷Ò»¸ö¼¼ÄÜÏµÍ³½Ó¿ÚµÄ±äÁ¿
+	//å½“å‰ä½¿ç”¨çš„Hackçš„æ–¹å¼å»ä¿®æ”¹å±æ€§å€¼ ï¼Œ æ­£ç¡®çš„åšæ³•æ˜¯ç”¨Gameplay Effect
+	//å£°æ˜ä¸€ä¸ªæŠ€èƒ½ç³»ç»Ÿæ¥å£çš„å˜é‡
 	IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>( OtherActor );
 
-	//¼ìÑéÉùÃ÷µÄ½Ó¿Ú±äÁ¿ÊÇ·ñÓĞĞ§
+	//æ£€éªŒå£°æ˜çš„æ¥å£å˜é‡æ˜¯å¦æœ‰æ•ˆ
 	if (ASCInterface)
 	{
-		//µ±³öÏÖ¸ÃÀàĞÍÖµÎŞ·¨³õÊ¼»¯ºóÃæµÄ±äÁ¿Öµ ÔòĞèÒª×ª»»
+		//å½“å‡ºç°è¯¥ç±»å‹å€¼æ— æ³•åˆå§‹åŒ–åé¢çš„å˜é‡å€¼ åˆ™éœ€è¦è½¬æ¢
 		const UCNAttributeSet* CNrpgAttributeSet = Cast<UCNAttributeSet>( ASCInterface->GetAbilitySystemComponent()->GetAttributeSet(UCNAttributeSet::StaticClass()) );
-		//ÅĞ¶Ï×ÔÉùÃ÷µÄAttributeÊÇ·ñÓĞĞ§
+		//åˆ¤æ–­è‡ªå£°æ˜çš„Attributeæ˜¯å¦æœ‰æ•ˆ
 		if (CNrpgAttributeSet)
 		{
-			//Òª¼ÇµÃÌí¼Ó*ºÅ
-			UCNAttributeSet* MutableRpgAttributeSet = const_cast<UCNAttributeSet*>(CNrpgAttributeSet);
-			//¸üĞÂÑªÁ¿Öµ
-			MutableRpgAttributeSet->SetHealth(125.f);
-			//Ê¹ÓÃ´İ»Ùµ±Ç°Actor
-			Destroy();
+			UAbilitySystemComponent* ASC = ASCInterface->GetAbilitySystemComponent();
+			FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
+			FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(EffectToApply, 1.0f , EffectContextHandle);
+
+			/*ASC->ApplyGameplayEffectSpecToSelf( *EffectSpecHandle.Data.Get() );*/
+			FActiveGameplayEffectHandle EffectHanle = ASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+			switch (EffectRemovePolicy)
+			{
+				//å½“é€‰æ‹©Removeè§¦å‘åç›´æ¥ç§»é™¤
+			  case EEffectRemovePolicy::Remove:
+			  {
+				  Destroy();
+				  break;
+			   }
+			  //é€‰æ‹©DoNotRemoveä¼ é€’å¥æŸ„
+			  case EEffectRemovePolicy::DoNotRemove:
+			  {
+				  ActiveEffectHandleMap.Add(ASC, EffectHanle);
+				  break;
+			  }
+			}
+
+			//ä»¥ä¸‹æ–¹æ³•æš‚æ—¶åºŸå¼ƒ
+			////è¦è®°å¾—æ·»åŠ *å·
+			//UCNAttributeSet* MutableRpgAttributeSet = const_cast<UCNAttributeSet*>(CNrpgAttributeSet);
+			////æ›´æ–°è¡€é‡å€¼
+			//MutableRpgAttributeSet->SetHealth(125.f);
+			//MutableRpgAttributeSet->SetMana(75.f);
+			////ä½¿ç”¨æ‘§æ¯å½“å‰Actor
+			/*Destroy();*/
 		}
+	}
+}
+
+void AEffectActor::RemoveEffect(AActor* OtherActor)
+{
+	IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>(OtherActor);
+	UAbilitySystemComponent* ASC = ASCInterface->GetAbilitySystemComponent();
+
+	if ( ASC )
+	{
+		FActiveGameplayEffectHandle EffectHandle =ActiveEffectHandleMap[ASC];
+
+		ASC->RemoveActiveGameplayEffect(EffectHandle);
 	}
 }
 

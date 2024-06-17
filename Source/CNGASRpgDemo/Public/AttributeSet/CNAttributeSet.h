@@ -5,13 +5,15 @@
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
 #include "AbilitySystemComponent.h"
+#include "GameplayEffectExtension.h"
+
 #include "CNAttributeSet.generated.h"
 
 /**
  * 
  */
 
-//¸Ãºê¶¨ÒåµÄ×÷ÓÃ±ãÊÇ²»ÓÃÔÙÈ¥ÊÖĞ´get set ·½·¨ À´½ÚÊ¡´úÂëÁ¿
+//è¯¥å®å®šä¹‰çš„ä½œç”¨ä¾¿æ˜¯ä¸ç”¨å†å»æ‰‹å†™get set æ–¹æ³• æ¥èŠ‚çœä»£ç é‡
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
  	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
  	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
@@ -28,44 +30,54 @@ class CNGASRPGDEMO_API UCNAttributeSet : public UAttributeSet
 	GENERATED_BODY()
 
 public:
-	//¶¨ÒåÒ»¸ö¹¹Ôìº¯Êı
+	//å®šä¹‰ä¸€ä¸ªæ„é€ å‡½æ•°
 	UCNAttributeSet();
 
 
 	virtual void GetLifetimeReplicatedProps( TArray<FLifetimeProperty>& OutLifetimeProps ) const override;
 
-	//ÉùÃ÷Ò»¸ö½¡¿µÊôĞÔ±äÁ¿
+	//é‡è½½PreAttributeChange( const FGameplayAttribute& Attribute , float& Newvalueï¼‰
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+
+	//ä¿®æ”¹BaseValue
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+
+
+
+
+public:
+	//å£°æ˜ä¸€ä¸ªå¥åº·å±æ€§å˜é‡
 	UPROPERTY( BlueprintReadOnly , ReplicatedUsing = OnRep_Health )
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UCNAttributeSet, Health)
-	//ÉùÃ÷ÍøÂç¸´ÖÆËùĞèÒªÊµÏÖµÄ×Ô¶¨ÒåµÄ·½·¨
+	//å£°æ˜ç½‘ç»œå¤åˆ¶æ‰€éœ€è¦å®ç°çš„è‡ªå®šä¹‰çš„æ–¹æ³•
 	UFUNCTION()
 	void OnRep_Health( const FGameplayAttributeData& OldHealth );
 
-	//ÉùÃ÷Ò»¸ö×î´ó½¡¿µÊôĞÔ±äÁ¿
+	//å£°æ˜ä¸€ä¸ªæœ€å¤§å¥åº·å±æ€§å˜é‡
 	UPROPERTY( BlueprintReadOnly , ReplicatedUsing=OnRep_MaxHealth)
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UCNAttributeSet, MaxHealth)
 
-	//ÉùÃ÷ÍøÂç¸´ÖÆËùĞèÒªÊµÏÖµÄ×î´ó½¡¿µÊôĞÔËùÒªÊµÏÖµÄ·½·¨
+	//å£°æ˜ç½‘ç»œå¤åˆ¶æ‰€éœ€è¦å®ç°çš„æœ€å¤§å¥åº·å±æ€§æ‰€è¦å®ç°çš„æ–¹æ³•
 	UFUNCTION()
 	void OnRep_MaxHealth(const FGameplayAttributeData& OldAMaxHealth);
 
-	//ÉùÃ÷Ò»¸ömana¼´Ä§·¨Á¿ÊôĞÔµÄ±äÁ¿
+	//å£°æ˜ä¸€ä¸ªmanaå³é­”æ³•é‡å±æ€§çš„å˜é‡
 	UPROPERTY( BlueprintReadOnly , ReplicatedUsing = OnRep_Mana )
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UCNAttributeSet, Mana)
 
-	//ÉùÃ÷ÍøÂç¸´ÖÆËùĞèÒªÊµÏÖµÄMana×Ô¶¨Òå·½·¨
+	//å£°æ˜ç½‘ç»œå¤åˆ¶æ‰€éœ€è¦å®ç°çš„Manaè‡ªå®šä¹‰æ–¹æ³•
 	UFUNCTION()
 	void OnRep_Mana( const FGameplayAttributeData& OldMana );
 
-	//ÉùÃ÷Ò»¸öMaxMana±äÁ¿µÄÄ§·¨ÊôĞÔ
+	//å£°æ˜ä¸€ä¸ªMaxManaå˜é‡çš„é­”æ³•å±æ€§
 	UPROPERTY(BlueprintReadOnly , ReplicatedUsing = OnRep_MaxMana )
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UCNAttributeSet, MaxMana)
 
-	//ÉùÃ÷ÍøÂç¸´ÖÆËùĞèÒªÊµÏÖµÄMaxMana×Ô¶¨ÒåµÄ·½·¨
+	//å£°æ˜ç½‘ç»œå¤åˆ¶æ‰€éœ€è¦å®ç°çš„MaxManaè‡ªå®šä¹‰çš„æ–¹æ³•
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana);
 };

@@ -13,18 +13,18 @@ class UAbilitySystemComponent;
 class UAttributeSet;
 
 
-//ĞÂ¶¨ÒåÒ»¸öU ½á¹¹Ìå
+//æ–°å®šä¹‰ä¸€ä¸ªU ç»“æ„ä½“
 USTRUCT( BlueprintType )
 struct FWidgetControllerParams
 {
 	GENERATED_BODY()
 
-	//ÉùÃ÷Ò»¸öÎŞ²Î¹¹Ôìº¯Êı
+	//å£°æ˜ä¸€ä¸ªæ— å‚æ„é€ å‡½æ•°
 	FWidgetControllerParams(){}
-	//ÉùÃ÷Ò»¸öÓĞ²Î¹¹Ôìº¯Êı
+	//å£°æ˜ä¸€ä¸ªæœ‰å‚æ„é€ å‡½æ•°
 	FWidgetControllerParams( APlayerController* PC , APlayerState* PS , UAbilitySystemComponent* ASC , UAttributeSet* AS):PlayerController(PC), PlayerState(PS), AbilitySystemComponent(ASC), AttributeSet(AS)
 	{}
-	//¼Ç×¡ÕâÀïĞèÒª¼ÓPublicÀ´¹«¿ªº¯Êı
+	//è®°ä½è¿™é‡Œéœ€è¦åŠ Publicæ¥å…¬å¼€å‡½æ•°
 public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere , Category = "WidgetController")
 	TObjectPtr<APlayerController> PlayerController = nullptr;
@@ -41,8 +41,8 @@ public:
 };
 
 
-//Ê¹ÓÃBlueprintable £º¿ÉÀ¶Í¼»¯
-UCLASS( Blueprintable )
+//ä½¿ç”¨Blueprintable ï¼šå¯è“å›¾åŒ–
+UCLASS( Blueprintable , BlueprintType )
 class CNGASRPGDEMO_API UCNWidgetController : public UObject
 {
 	GENERATED_BODY()
@@ -51,21 +51,29 @@ public:
 	UFUNCTION( BlueprintCallable )
 	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
 
+	//åœ¨Controlå±‚ä¸­å»å®šä¹‰å¹¿æ’­å’Œç»‘å®šçš„æ–¹æ³• åœ¨Modelå±‚ä¸­åŒç†
+	//å®šä¹‰ä¸€ä¸ªå¹¿æ’­çš„è™šæ–¹æ³•
+	virtual void BroadcastInitialValues();
+
+
+	//å®šä¹‰ä¸€ä¸ªç»‘å®šçš„è™šæ–¹æ³•
+	virtual void BindCallbackToDepencies();
+
 protected:
 
-	//ĞÂÉùÃ÷Ò»¸öPlayerControllerÊôĞÔ
+	//æ–°å£°æ˜ä¸€ä¸ªPlayerControllerå±æ€§
 	UPROPERTY( BlueprintReadOnly , Category = "WidgetController")
 	TObjectPtr<APlayerController> PlayerController;
 
-	//ÉùÃ÷Ò»¸öPlayerSateµÄ±äÁ¿
+	//å£°æ˜ä¸€ä¸ªPlayerSateçš„å˜é‡
 	UPROPERTY( BlueprintReadOnly , Category = "WidgetController")
 	TObjectPtr<APlayerState> PlayerState;
 
-	//ÉùÃ÷Ò»¸öAbilitySystemComponentµÄ±äÁ¿
+	//å£°æ˜ä¸€ä¸ªAbilitySystemComponentçš„å˜é‡
 	UPROPERTY( BlueprintReadOnly , Category = "WidgetController")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
-	//ÉùÃ÷Ò»¸öAttributeSetµÄ±äÁ¿
+	//å£°æ˜ä¸€ä¸ªAttributeSetçš„å˜é‡
 	UPROPERTY( BlueprintReadOnly , Category = "WidgetController")
 	TObjectPtr<UAttributeSet> AttributeSet;
 	
