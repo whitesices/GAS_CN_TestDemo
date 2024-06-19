@@ -2,16 +2,16 @@
 
 
 #include "UI/WidgetController/OverlayWidgetController.h"
-//ÒıÈë×Ô¶¨ÒåµÄAttributeSetµÄ·½·¨
+//å¼•å…¥è‡ªå®šä¹‰çš„AttributeSetçš„æ–¹æ³•
 #include "AttributeSet/CNAttributeSet.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
-	//ĞÂÉùÃ÷Ò»¸öUCNAttributeSetÀ´×÷ÎªÖĞ¼ä±äÁ¿´«µİÖµ
-	//Ê¹ÓÃCastChecked·½·¨ ÔËĞĞµÄÍ¬Ê±²¢½øĞĞ¼ì²é
+	//æ–°å£°æ˜ä¸€ä¸ªUCNAttributeSetæ¥ä½œä¸ºä¸­é—´å˜é‡ä¼ é€’å€¼
+	//ä½¿ç”¨CastCheckedæ–¹æ³• è¿è¡Œçš„åŒæ—¶å¹¶è¿›è¡Œæ£€æŸ¥
 	UCNAttributeSet* CNRpgAtributeSets = CastChecked<UCNAttributeSet>( AttributeSet );
 
-	//¹ã²¥ÏàÓ¦²ÎÊı,¹ã²¥¸øUI²ãÃæ
+	//å¹¿æ’­ç›¸åº”å‚æ•°,å¹¿æ’­ç»™UIå±‚é¢
 	OnHealthChanged.Broadcast( CNRpgAtributeSets->GetHealth() );
 	OnMaxHealthChanged.Broadcast(CNRpgAtributeSets->GetMaxHealth());
 	OnManaChanged.Broadcast(CNRpgAtributeSets->GetMana());
@@ -22,15 +22,16 @@ void UOverlayWidgetController::BindCallbackToDepencies()
 {
 	/*Super::BindCallbackToDepencies();*/
 
-	//ĞÂÉùÃ÷Ò»¸öUCNAttributeSetÀ´×÷ÎªÖĞ¼ä±äÁ¿´«µİÖµ
+	//æ–°å£°æ˜ä¸€ä¸ªUCNAttributeSetæ¥ä½œä¸ºä¸­é—´å˜é‡ä¼ é€’å€¼
 	UCNAttributeSet* CNRpgAttributSets = CastChecked<UCNAttributeSet>( AttributeSet );
 
-	//ÓÃÁ½ÖÖ·½Ê½½øĞĞ°ó¶¨ Ò»ÖÖÊÇAddUObject , Ò»ÖÖÊÇ AddLamda±í´ïÊ½
-	//ÏÈÊ¹ÓÃAddUObjectµÄ·½Ê½
+	//ç”¨ä¸¤ç§æ–¹å¼è¿›è¡Œç»‘å®š ä¸€ç§æ˜¯AddUObject , ä¸€ç§æ˜¯ AddLamdaè¡¨è¾¾å¼
+	//å…ˆä½¿ç”¨AddUObjectçš„æ–¹å¼
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(CNRpgAttributSets->GetHealthAttribute()).AddUObject( this , &UOverlayWidgetController::OnHealthChange);
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(CNRpgAttributSets->GetHealthAttribute()).AddUObject(this, &UOverlayWidgetController::OnMaxHealthChange);
+	//æ³¨æ„è¿™é‡Œä¸è¦è¾“å…¥ä¸ºGetMaxHealthAttributes
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(CNRpgAttributSets->GetMaxHealthAttribute()).AddUObject(this, &UOverlayWidgetController::OnMaxHealthChange);
 
-	//ÏÂÃæÊ¹ÓÃLamdaµÄ±í´ï·½Ê½
+	//ä¸‹é¢ä½¿ç”¨Lamdaçš„è¡¨è¾¾æ–¹å¼
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(CNRpgAttributSets->GetManaAttribute()).AddLambda([this](const FOnAttributeChangeData& Data) {
 
 		OnManaChanged.Broadcast(Data.NewValue);
@@ -47,13 +48,13 @@ void UOverlayWidgetController::BindCallbackToDepencies()
 
 void UOverlayWidgetController::OnHealthChange(const FOnAttributeChangeData& Data)
 {
-	//½«×Ô¼º¶¨ÒåµÄFOnAttributeValueChangeSignature ½øĞĞ¹ã²¥
+	//å°†è‡ªå·±å®šä¹‰çš„FOnAttributeValueChangeSignature è¿›è¡Œå¹¿æ’­
 	OnHealthChanged.Broadcast(Data.NewValue);
 }
 
 void UOverlayWidgetController::OnMaxHealthChange(const FOnAttributeChangeData& Data)
 {
-	//½«×Ô¼º¶¨ÒåµÄFOnAttributeValueChangeSignature ½øĞĞ¹ã²¥
+	//å°†è‡ªå·±å®šä¹‰çš„FOnAttributeValueChangeSignature è¿›è¡Œå¹¿æ’­
 	OnMaxHealthChanged.Broadcast(Data.NewValue);
 }
 

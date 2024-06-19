@@ -35,7 +35,7 @@ void UCNAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, fl
 	if (Attribute == GetHealthAttribute())
 	{
 		//获取最大生命值
-		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
+		NewValue = FMath::Clamp( NewValue, 0.f,GetMaxHealth() );
 	}
 
 	if (Attribute == GetManaAttribute())
@@ -50,17 +50,17 @@ void UCNAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, fl
 //修改BaseValue
 void UCNAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
-	/*Super::PostGameplayEffectExecute(Data);*/
+	Super::PostGameplayEffectExecute(Data);
 	//设置最大生命值
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		//对基础值的一个前置
-		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()) );
+		SetHealth( FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()) );
 	}
 
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
-		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+		SetMana( FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
 	}
 }
 
