@@ -24,6 +24,12 @@ void UCNAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME_CONDITION_NOTIFY(UCNAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCNAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
 
+	//通知主要属性
+	DOREPLIFETIME_CONDITION_NOTIFY(UCNAttributeSet, Strength, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCNAttributeSet, Intelligence, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCNAttributeSet, Resiliense, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCNAttributeSet, Vigor, COND_None, REPNOTIFY_Always);
+
 }
 
 //重载Attribute预改变
@@ -82,4 +88,24 @@ void UCNAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana)
 void UCNAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UCNAttributeSet, MaxMana, OldMaxMana);
+}
+
+void UCNAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCNAttributeSet, Strength, OldStrength);
+}
+
+void UCNAttributeSet::OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCNAttributeSet, Intelligence, OldIntelligence);
+}
+
+void UCNAttributeSet::OnRep_Resiliense(const FGameplayAttributeData& OldResiliense)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCNAttributeSet, Resiliense, OldResiliense);
+}
+
+void UCNAttributeSet::OnRep_Vigor(const FGameplayAttributeData& OldVigor)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCNAttributeSet, Vigor, OldVigor);
 }

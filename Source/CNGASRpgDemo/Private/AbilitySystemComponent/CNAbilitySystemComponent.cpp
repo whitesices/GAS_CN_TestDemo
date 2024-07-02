@@ -3,3 +3,26 @@
 
 #include "AbilitySystemComponent/CNAbilitySystemComponent.h"
 
+void UCNAbilitySystemComponent::AbilityActorInfoSet()
+{
+	OnGameplayEffectAppliedDelegateToSelf.AddUObject( this , &UCNAbilitySystemComponent::EffectApplied);
+}
+
+void UCNAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* ASC, const FGameplayEffectSpec& GES, FActiveGameplayEffectHandle AEH)
+{
+	//从GameplayTag容器里获取相应参数
+	FGameplayTagContainer TagContainer;
+
+	GES.GetAllAssetTags(TagContainer);
+
+	//for (const FGameplayTag& GameplayTag : TagContainer)
+	//{
+	//	//将信息打印到屏幕上
+	//	const FString Msg = FString::Printf(TEXT("GE_Tag : %s"), *GameplayTag.ToString());
+
+	//	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, Msg);
+	//}
+
+	//将相应信息进行广播
+	EffectAssetTags.Broadcast( TagContainer );
+}

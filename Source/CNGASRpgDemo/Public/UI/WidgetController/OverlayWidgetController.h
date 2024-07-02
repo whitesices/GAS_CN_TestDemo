@@ -7,12 +7,40 @@
 #include "AbilitySystemComponent.h"
 #include "OverlayWidgetController.generated.h"
 
+class UCNUserWidget;
+
+
+USTRUCT( BlueprintType )
+struct FUIWidgetRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	//å£°æ˜GameplayTag
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
+	FGameplayTag MessageTag = FGameplayTag();
+
+	//å£°æ˜FText æ–‡æœ¬å˜é‡ä¿¡æ¯
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
+	FText Message = FText();
+
+	//å£°æ˜è‡ªå®šçš„UCNUserWidgetçš„ç±»å˜é‡
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
+	TSubclassOf<UCNUserWidget> MessageWidget;
+
+
+	//å£°æ˜ä¸€ä¸ªTexture2Dçš„å˜é‡
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
+	UTexture2D* Image = nullptr;
+
+};
+
 /**
  * 
  */
-//½øĞĞÒ»¸öÏòÏÂ´¦ÀíµÄ¹ã²¥
-//ÉùÃ÷Ò»¸ö¶à²¥Î¯ÍĞ
+//è¿›è¡Œä¸€ä¸ªå‘ä¸‹å¤„ç†çš„å¹¿æ’­
+//å£°æ˜ä¸€ä¸ªå¤šæ’­å§”æ‰˜
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeValueChangeSignature ,float ,NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature , FUIWidgetRow, Row);
 
 UCLASS()
 class CNGASRPGDEMO_API UOverlayWidgetController : public UCNWidgetController
@@ -21,14 +49,14 @@ class CNGASRPGDEMO_API UOverlayWidgetController : public UCNWidgetController
 
 
 public:
-	//ÖØĞ´ÔÚ»ùÀàÖĞ°ó¶¨ ¹ã²¥µÄ·½·¨
+	//é‡å†™åœ¨åŸºç±»ä¸­ç»‘å®š å¹¿æ’­çš„æ–¹æ³•
 
 	virtual void BroadcastInitialValues() override;
 
 	virtual void BindCallbackToDepencies() override;
 
 public:
-	//ÉùÃ÷×Ô¶¨ÒåµÄ¶à²¥ÀàĞÍ ±äÁ¿
+	//å£°æ˜è‡ªå®šä¹‰çš„å¤šæ’­ç±»å‹ å˜é‡
 	UPROPERTY( BlueprintAssignable , Category = "GAS|Attributes")
 	FOnAttributeValueChangeSignature OnHealthChanged;
 
@@ -41,10 +69,29 @@ public:
 	UPROPERTY( BlueprintAssignable , Category = "GAS|Attributes")
 	FOnAttributeValueChangeSignature OnMaxManaChanged;
 
+	//å®šä¹‰å§”æ‰˜ä»DataTableè¯»å–çš„æ•°æ®
+	UPROPERTY( BlueprintAssignable , Category = "GAS|Message")
+	FMessageWidgetRowSignature MessageWidgetRowDelegate;
+
 protected:
-	//ÉùÃ÷AddUObjectĞèÒª°ó¶¨µÄ·½·¨, ×¢ÒâÊı¾İÀàĞÍÎªFOnAttributeChangeData £¬ ÒòÎªGetGameplayAttributeValueChangeDelegate ´«²¥µÄÊı¾İÀàĞÍÊÇFOnAttributeChangeData
+	//å£°æ˜AddUObjectéœ€è¦ç»‘å®šçš„æ–¹æ³•, æ³¨æ„æ•°æ®ç±»å‹ä¸ºFOnAttributeChangeData ï¼Œ å› ä¸ºGetGameplayAttributeValueChangeDelegate ä¼ æ’­çš„æ•°æ®ç±»å‹æ˜¯FOnAttributeChangeData
 	void OnHealthChange(const FOnAttributeChangeData& Data);
 
 	void OnMaxHealthChange(const FOnAttributeChangeData& Data);
+
+protected:
+	//å£°æ˜ä¸€ä¸ªDataTableçš„å˜é‡
+	UPROPERTY( EditDefaultsOnly , BlueprintReadOnly , Category = "Widget_Data")
+	TObjectPtr<UDataTable> MessageWidgetDataTable;
+
+	//å£°æ˜å­˜å‚¨æ¸¸æˆtagçš„å˜é‡
+	template< typename T >
+	T* GetDataTableRowByTag( UDataTable* DataTable , const FGameplayTag& Tag);
 	
 };
+
+template<typename T>
+inline T* UOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag)
+{
+	return DataTable->FindRow<T>( Tag.GetTagName(), TEXT("") );
+}

@@ -2,6 +2,9 @@
 
 
 #include "Character/CNGasRpgCharacterBase.h"
+#include "AttributeSet/CNAttributeSet.h"
+//引入AttributeSet头文件
+#include "AttributeSet.h"
 
 // Sets default values
 ACNGasRpgCharacterBase::ACNGasRpgCharacterBase()
@@ -26,5 +29,36 @@ ACNGasRpgCharacterBase::ACNGasRpgCharacterBase()
 UAbilitySystemComponent* ACNGasRpgCharacterBase::GetAbilitySystemComponent() const
 {
 	return CNAbilitySystemComponent;
+}
+
+//定义一个主要属性参数的方法
+void ACNGasRpgCharacterBase::InitPrimaryAttribute() const
+{
+	////声明一个中间变量来容纳自己传递的技能属性
+	//const UCNAttributeSet* CNAttribute = Cast<UCNAttributeSet>( CNAbilitySystemComponent->GetAttributeSet(UCNAttributeSet::StaticClass()));
+	////若声明的CNAttribute有效
+	//if (CNAttribuset)
+	//{
+	//	FGameplayEffectContextHandle EffectContextHandle = 
+	//}
+	//检查获取AbilitySystemComponent是否有效
+	if (!IsValid(GetAbilitySystemComponent()))
+	{
+		return;
+	}
+	if (!PrimaryAttributeEffect)
+	{
+		return;
+	}
+
+	const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+
+	const FGameplayEffectSpecHandle EffectSpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(PrimaryAttributeEffect, 1.0f, ContextHandle);
+
+	//应用GameplayEffect
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget( *EffectSpecHandle.Data.Get() , GetAbilitySystemComponent() );
+
+
+
 }
 

@@ -8,7 +8,7 @@
 #include "CNGasRpgPlayerState.generated.h"
 
 
-//ÒıÈëÏàÓ¦µÄÀà
+//å¼•å…¥ç›¸åº”çš„ç±»
 class UAbilitySystemComponent;
 class UAttributeSet;
 
@@ -22,19 +22,19 @@ class CNGASRPGDEMO_API ACNGasRpgPlayerState : public APlayerState , public IAbil
 public:
 	ACNGasRpgPlayerState();
 
-	//ÖØÔØ»ñÈ¡ÏµÍ³×é¼şµÄ·½·¨
+	//é‡è½½è·å–ç³»ç»Ÿç»„ä»¶çš„æ–¹æ³•
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
-	//¶¨ÒåÒ»¸ö»ñÈ¡¼¼ÄÜÊôĞÔµÄ·½·¨
+	//å®šä¹‰ä¸€ä¸ªè·å–æŠ€èƒ½å±æ€§çš„æ–¹æ³•
 	UAttributeSet* GetAttributeSet() const
 	{
 		return CNAttributeSet;
 	}
-	//ÉùÃ÷Ò»¸ö¼¼ÄÜÏµÍ³×é¼ş±äÁ¿
-	UPROPERTY( EditAnywhere , Category = "CNAbilitySystemComponent")
+	//å£°æ˜ä¸€ä¸ªæŠ€èƒ½ç³»ç»Ÿç»„ä»¶å˜é‡
+	UPROPERTY( VisibleAnywhere , Category = "CNAbilitySystemComponent")
 	TObjectPtr<UAbilitySystemComponent> CNAbilitySystemComponent;
 
-	//ÉùÃ÷Ò»¸ö¼¼ÄÜÊôĞÔ±äÁ¿
+	//å£°æ˜ä¸€ä¸ªæŠ€èƒ½å±æ€§å˜é‡
 	UPROPERTY( EditAnywhere , Category = "CNAttributeSet")
 	TObjectPtr<UAttributeSet> CNAttributeSet;
 	

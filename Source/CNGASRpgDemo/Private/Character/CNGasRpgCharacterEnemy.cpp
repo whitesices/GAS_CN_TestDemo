@@ -47,4 +47,9 @@ void ACNGasRpgCharacterEnemy::BeginPlay()
 
 	//调用abilitySystemComponent 初始化技能Actor的信息
 	CNAbilitySystemComponent->InitAbilityActorInfo( this , this );
+	//调用AbilitySystemComponent初始化actor信息的方法
+	/*CNAbilitySystemComponent->AbilityActorInfoSet;*/
+	Cast<UCNAbilitySystemComponent>(CNAbilitySystemComponent)->AbilityActorInfoSet();
+	//在子类的beginplay中去调用
+	InitPrimaryAttribute();
 }

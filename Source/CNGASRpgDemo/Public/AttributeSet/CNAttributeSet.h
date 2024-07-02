@@ -46,6 +46,8 @@ public:
 
 
 public:
+
+	//必要属性
 	//声明一个健康属性变量
 	UPROPERTY( BlueprintReadOnly , ReplicatedUsing = OnRep_Health )
 	FGameplayAttributeData Health;
@@ -80,4 +82,33 @@ public:
 	//声明网络复制所需要实现的MaxMana自定义的方法
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana);
+
+	//主要属性
+	UPROPERTY( BlueprintReadOnly , ReplicatedUsing = OnRep_Strength )
+	FGameplayAttributeData Strength;
+	ATTRIBUTE_ACCESSORS( UCNAttributeSet, Strength )
+
+	UFUNCTION()
+	void OnRep_Strength(const FGameplayAttributeData& OldStrength);
+	/*------*/
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Intelligence)
+	FGameplayAttributeData Intelligence;
+	ATTRIBUTE_ACCESSORS(UCNAttributeSet, Intelligence)
+
+	UFUNCTION()
+	void OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence);
+	/*------*/
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Resiliense)
+	FGameplayAttributeData Resiliense;
+	ATTRIBUTE_ACCESSORS(UCNAttributeSet, Resiliense)
+
+	UFUNCTION()
+	void OnRep_Resiliense(const FGameplayAttributeData& OldResiliense);
+	/*------*/
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Vigor)
+	FGameplayAttributeData Vigor;
+	ATTRIBUTE_ACCESSORS(UCNAttributeSet, Vigor)
+
+	UFUNCTION()
+	void OnRep_Vigor(const FGameplayAttributeData& OldVigor);
 };

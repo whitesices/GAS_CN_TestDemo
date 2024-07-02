@@ -4,17 +4,16 @@
 #include "Character/CNGasRpgCharacterPlayer.h"
 #include "Gameplay/CNGasRpgPlayerState.h"
 #include "Gameplay/CNGasRpgPlayerController.h"
+#include "AbilitySystemComponent/CNAbilitySystemComponent.h"
 #include "UI/Hud/CNHUD.h"
 #include "AbilitySystemComponent.h"
 
 void ACNGasRpgCharacterPlayer::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy( NewController );
-	//·şÎñ¶Ë³õÊ¼»¯ability Actor info
+	//æœåŠ¡ç«¯åˆå§‹åŒ–ability Actor info
 	InitAbilityActorInfo();
 
-
-	
 
 }
 
@@ -22,45 +21,50 @@ void ACNGasRpgCharacterPlayer::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
-	//¿Í»§¶Ë³õÊ¼»¯Actorinfo
+	//å®¢æˆ·ç«¯åˆå§‹åŒ–Actorinfo
 	InitAbilityActorInfo();
 
 }
 
 void ACNGasRpgCharacterPlayer::InitAbilityActorInfo()
 {
-	//ÉùÃ÷Ò»¸öplayerstateµÄ±äÁ¿ ¶øÇÒÉùÃ÷µÄ±äÁ¿Ãû²»ÒªÓë»ùÀàµÄPlayerStateÖØ¸´ »á±»ÎóÈÏÎªµ÷ÓÃÏàÓ¦µÄÀà³ÉÔ±º¯Êı
+	//å£°æ˜ä¸€ä¸ªplayerstateçš„å˜é‡ è€Œä¸”å£°æ˜çš„å˜é‡åä¸è¦ä¸åŸºç±»çš„PlayerStateé‡å¤ ä¼šè¢«è¯¯è®¤ä¸ºè°ƒç”¨ç›¸åº”çš„ç±»æˆå‘˜å‡½æ•°
 	ACNGasRpgPlayerState* CNPlayerState = GetPlayerState<ACNGasRpgPlayerState>();
 
-	/*check(PlayerState)*///×îºÃ²»ÒªÓÃcheckÒòÎª ÔÚ±àÒëÊÇÔÚVSÖĞÄ³Ğ©Ê±ºò´æÔÚ±àÒë²»¹ı×îºÃifÅĞ¶Ï
+	/*check(PlayerState)*///æœ€å¥½ä¸è¦ç”¨checkå› ä¸º åœ¨ç¼–è¯‘æ˜¯åœ¨VSä¸­æŸäº›æ—¶å€™å­˜åœ¨ç¼–è¯‘ä¸è¿‡æœ€å¥½ifåˆ¤æ–­
 	if (!CNPlayerState)
 	{
 		return;
 	}
 	/*PlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo( PlayerState , this );*/
-	//ÒòÎª×Ô¼ºÕâÀï±àĞ´Ê±ÌáÊ¾ÎÒ²»ÍêÕûÀàĞÍÒò´Ë²ÉÓÃÁËÏÂÃæµÄ·½Ê½
-	//ºóÃæ·¢ÏÖÒªÒıÈëAbilitySystemComponent.h
+	//å› ä¸ºè‡ªå·±è¿™é‡Œç¼–å†™æ—¶æç¤ºæˆ‘ä¸å®Œæ•´ç±»å‹å› æ­¤é‡‡ç”¨äº†ä¸‹é¢çš„æ–¹å¼
+	//åé¢å‘ç°è¦å¼•å…¥AbilitySystemComponent.h
 	CNPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(CNPlayerState, this);
 
 	CNAbilitySystemComponent = CNPlayerState->GetAbilitySystemComponent();
 
+	//å¼•å…¥æ·»åŠ AbilityActorInfoSetæ–¹æ³•
+	Cast<UCNAbilitySystemComponent>(CNAbilitySystemComponent)->AbilityActorInfoSet();
+
 	CNAttribuset = CNPlayerState->GetAttributeSet();
 
 
-	//´´½¨UIµÄ²Ù×÷
-	//»ñÈ¡Controller
+	//åˆ›å»ºUIçš„æ“ä½œ
+	//è·å–Controller
 	if (ACNGasRpgPlayerController* CNPlayerController = GetController<ACNGasRpgPlayerController>())
 	{
-		//»ñÈ¡Hud
+		//è·å–Hud
 		if (ACNHUD* CNHUD = CNPlayerController->GetHUD<ACNHUD>())
 		{
-			//µ÷ÓÃhudÖĞ³õÊ¼»¯¼ÓÔØidgetµÄº¯Êı Ò²ÊÇMVCÊµÏÖµÄ×îºóÒ»»·
+			//è°ƒç”¨hudä¸­åˆå§‹åŒ–åŠ è½½idgetçš„å‡½æ•° ä¹Ÿæ˜¯MVCå®ç°çš„æœ€åä¸€ç¯
 			CNHUD->InitWidget(CNPlayerController , CNPlayerState , CNAbilitySystemComponent , CNAttribuset );
 		}
 	}
+
+	InitPrimaryAttribute();
 }
 
-//´íÎó ×Ô¼º¶àÊäÈëÒ»¸öÏÂ»®Ïß·ûºÅ
+//é”™è¯¯ è‡ªå·±å¤šè¾“å…¥ä¸€ä¸ªä¸‹åˆ’çº¿ç¬¦å·
 //void ACNGasRpgCharacterPlayer::OnRep__PlayerState()
 //{
 //}
