@@ -26,11 +26,17 @@ public:
 	//继承实现不高亮
 	void UnHighLight_Implementation() override;
 
+	//重写level
+	virtual int32 GetPlayerLevel_Implementation() override;
+
 protected:
 
 	//重载beginplay方法
 	virtual void BeginPlay() override;
 
-
+	//20240709
+	//在怪物基类中添加角色等级
+	UPROPERTY( EditAnywhere )
+	int32 Level = 1;
 	
 };

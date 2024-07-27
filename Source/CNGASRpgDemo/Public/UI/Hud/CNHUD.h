@@ -5,14 +5,16 @@
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
+
+
 #include "CNHUD.generated.h"
 
 class UCNUserWidget;
 
-//Ìí¼ÓÇ°ÖÃÉùÃ÷
+//æ·»åŠ å‰ç½®å£°æ˜
 class UAbilitySystemComponent;
 class UAttributeSet;
-
+class UAttributeMenuWidgetController;
 /**
  * 
  */
@@ -22,15 +24,18 @@ class CNGASRPGDEMO_API ACNHUD : public AHUD
 	GENERATED_BODY()
 
 public:
-	//ÉùÃ÷Ò»¸öĞÂµÄ±äÁ¿
+	//å£°æ˜ä¸€ä¸ªæ–°çš„å˜é‡
 	UPROPERTY()
 	TObjectPtr< UCNUserWidget > OverlayWidget;
 
-	//ĞÂ½¨Ò»¸ö×Ô¶¨Òå³õÊ¼»¯Widgetº¯Êı
+	//æ–°å»ºä¸€ä¸ªè‡ªå®šä¹‰åˆå§‹åŒ–Widgetå‡½æ•°
 	void InitWidget(APlayerController* pc, APlayerState* ps, UAbilitySystemComponent* ASC, UAttributeSet* AS);
 
-	//³õÊ¼»¯OverlayWidgetController
+	//åˆå§‹åŒ–OverlayWidgetController
 	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& Params);
+
+	//æ–°å»ºè·å–AttributeMenuWidgetControllerçš„getæ–¹æ³•
+	UAttributeMenuWidgetController* GetAttributeWidgetController(const FWidgetControllerParams& Params);
 
 
 
@@ -39,17 +44,25 @@ protected:
 
 private:
 
-	//ÉùÃ÷Ò»¸öUserWidgetË½ÓĞ±äÁ¿
+	//å£°æ˜ä¸€ä¸ªUserWidgetç§æœ‰å˜é‡
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UCNUserWidget> OverlayWidgetClass;
 
-	//ÉùÃ÷Ò»¸öOverlayWidgetController ±äÁ¿
+	//å£°æ˜ä¸€ä¸ªOverlayWidgetController å˜é‡
 	UPROPERTY()
 	TObjectPtr<UOverlayWidgetController> OverlayWidgetController;
 
-	//ÉùÃ÷OverlayWidgetControllerÀà
+	//å£°æ˜OverlayWidgetControllerç±»
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UOverlayWidgetController> OverlayWidgetControllerClass;
+
+	//åœ¨Hudä¸­é…ç½®AttributeMenuWidgetController
+	UPROPERTY()
+	TObjectPtr<UAttributeMenuWidgetController> AttributeMenuWidgetController;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UAttributeMenuWidgetController> AttributeMenuWidgetControllerClass;
+
 
 	
 };

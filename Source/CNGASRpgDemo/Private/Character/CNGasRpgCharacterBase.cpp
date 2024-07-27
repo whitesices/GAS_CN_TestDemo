@@ -31,6 +31,11 @@ UAbilitySystemComponent* ACNGasRpgCharacterBase::GetAbilitySystemComponent() con
 	return CNAbilitySystemComponent;
 }
 
+int32 ACNGasRpgCharacterBase::GetPlayerLevel_Implementation()
+{
+	return 0;
+}
+
 //定义一个主要属性参数的方法
 void ACNGasRpgCharacterBase::InitPrimaryAttribute() const
 {
@@ -42,6 +47,22 @@ void ACNGasRpgCharacterBase::InitPrimaryAttribute() const
 	//	FGameplayEffectContextHandle EffectContextHandle = 
 	//}
 	//检查获取AbilitySystemComponent是否有效
+
+	//配置主要属性
+	CNApplyEffectToSelf( PrimaryAttributeEffect , 1.0f);
+
+	//配置次要属性
+	CNApplyEffectToSelf( SecondaryAttributeEffect, 1.0f);
+
+	//配置必要属性
+	CNApplyEffectToSelf( VitalAttributeEffect, 1.0f );
+
+}
+
+
+//应用GE
+void ACNGasRpgCharacterBase::CNApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float level) const
+{
 	if (!IsValid(GetAbilitySystemComponent()))
 	{
 		return;
@@ -51,14 +72,15 @@ void ACNGasRpgCharacterBase::InitPrimaryAttribute() const
 		return;
 	}
 
-	const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	/*const*/ FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
 
-	const FGameplayEffectSpecHandle EffectSpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(PrimaryAttributeEffect, 1.0f, ContextHandle);
+	//在MMC_MaxHealth中会报错找不到SourceObject的原因便是没有在这里进行相应Object的添加
+	ContextHandle.AddSourceObject(this);
+
+
+	const FGameplayEffectSpecHandle EffectSpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass , 1.0f , ContextHandle);
 
 	//应用GameplayEffect
-	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget( *EffectSpecHandle.Data.Get() , GetAbilitySystemComponent() );
-
-
-
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), GetAbilitySystemComponent());
 }
 

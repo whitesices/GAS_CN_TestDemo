@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+//引入自定义计算传递数据的接口
+#include "Interface/CombateInterface.h"
 #include "CNGasRpgCharacterBase.generated.h"
 
 class UAbilitySystemComponent;
@@ -13,7 +15,7 @@ class UGameplayEffect;
 
 //需要继承ability的相应接口
 UCLASS()
-class CNGASRPGDEMO_API ACNGasRpgCharacterBase : public ACharacter , public IAbilitySystemInterface
+class CNGASRPGDEMO_API ACNGasRpgCharacterBase : public ACharacter , public IAbilitySystemInterface ,public ICombateInterface
 {
 	GENERATED_BODY()
 public:
@@ -29,9 +31,17 @@ public:
 		return CNAttribuset;
 	}
 
+public:
+	//这里提示无法重写 因此去掉了override
+	virtual int32 GetPlayerLevel_Implementation() ;
+
 protected:
 	//定义一个初始化主要属性参数的方法
 	void InitPrimaryAttribute() const;
+
+	void CNApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float level) const;
+
+	/*void InitSecond*/
 
 protected:
 
@@ -51,5 +61,13 @@ protected:
 	//声明一个容纳主要属性GE的类变量
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UGameplayEffect> PrimaryAttributeEffect;
+
+	//声明一个次要属性GE的类变量
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UGameplayEffect> SecondaryAttributeEffect;
+
+	//新增声明一个必要属性GE的类变量
+	UPROPERTY( EditDefaultsOnly )
+	TSubclassOf< UGameplayEffect > VitalAttributeEffect;
 
 };

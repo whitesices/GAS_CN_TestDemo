@@ -25,6 +25,16 @@ public:
 	//重载获取系统组件的方法
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	//定义一个公共函数返回Level
+	int32 GetLevel()
+	{
+		return Level;
+	}
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+
+
 	//定义一个获取技能属性的方法
 	UAttributeSet* GetAttributeSet() const
 	{
@@ -37,5 +47,15 @@ public:
 	//声明一个技能属性变量
 	UPROPERTY( EditAnywhere , Category = "CNAttributeSet")
 	TObjectPtr<UAttributeSet> CNAttributeSet;
-	
+
+protected:
+	//20240709
+	//添加角色level
+	//BlueprintReadOnly ,暂时去除
+	UPROPERTY(  EditAnywhere , ReplicatedUsing =OnRep_Level )
+	int32 Level = 1;
+
+	UFUNCTION()
+	//自定义绑定需要调用的方法
+	void OnRep_Level( int32 OldLevel );
 };

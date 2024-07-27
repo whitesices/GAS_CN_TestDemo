@@ -16,13 +16,15 @@ class CNGASRPGDEMO_API ACNGasRpgCharacterPlayer : public ACNGasRpgCharacterBase
 
 public:
 
-	//ÖØĞ´Á½¸ö·½·¨
+	//é‡å†™ä¸¤ä¸ªæ–¹æ³•
 	virtual void PossessedBy( AController* NewController ) override;
 
 	virtual void OnRep_PlayerState() override;
 
-	//·â×°Ò»¸öInitAbilityActorInfo
+	//å°è£…ä¸€ä¸ªInitAbilityActorInfo
 	void InitAbilityActorInfo();
 
+	//å¤å†™ç›¸åº”çš„æ–¹æ³•
+	virtual int32 GetPlayerLevel_Implementation() override;
 	
 };

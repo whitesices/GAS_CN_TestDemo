@@ -3,53 +3,54 @@
 
 #include "UI/Hud/CNHUD.h"
 #include "Blueprint/UserWidget.h"
-//ĞèÒªÒıÈë×Ô¼º¶¨ÒåµÄUserWidget
+//éœ€è¦å¼•å…¥è‡ªå·±å®šä¹‰çš„UserWidget
 #include "UI/Widget/CNUserWidget.h"
+#include "UI/WidgetController/AttributeMenuWidgetController.h"
 
-//ÓÃInitWidgetÀ´Ìæ´úÔÚBeginplayÀïÌí¼ÓUI
+//ç”¨InitWidgetæ¥æ›¿ä»£åœ¨Beginplayé‡Œæ·»åŠ UI
 void ACNHUD::InitWidget(APlayerController* pc, APlayerState* ps, UAbilitySystemComponent* ASC, UAttributeSet* AS)
 {
 
-	//¼ì²éOverlayWidgetClassÊÇ·ñÓĞĞ§
+	//æ£€æŸ¥OverlayWidgetClassæ˜¯å¦æœ‰æ•ˆ
 	if (!OverlayWidgetClass)
 	{
 		return;
 	}
 
-	//¼ì²éOverlayWidgetClassÊÇ·ñÓĞĞ§
+	//æ£€æŸ¥OverlayWidgetClassæ˜¯å¦æœ‰æ•ˆ
 	if (!OverlayWidgetClass)
 	{
 		return;
 	}
-	//¿Î³ÌÖĞÊ¹ÓÃµÄÊÇCheckfµ«»á±¨´í Òò´Ë¼ÇÂ¼ÏàÓ¦´úÂëÒÔ×÷ºóĞø²Î¿¼
+	//è¯¾ç¨‹ä¸­ä½¿ç”¨çš„æ˜¯Checkfä½†ä¼šæŠ¥é”™ å› æ­¤è®°å½•ç›¸åº”ä»£ç ä»¥ä½œåç»­å‚è€ƒ
 
-	/*checkf(OverlayWidgetControllerClass, TEXT("µ±Ç°OverlayWidgetControllerÎŞĞ§,ÇëÔÚHUDÀ¶Í¼ÖĞÉèÖÃ"));
-	checkf(OverlayWidgetClass, TEXT("µ±Ç°OverlayWidgetClassÎŞĞ§,ÇëÔÚHUDÀ¶Í¼ÖĞÉèÖÃ"));*/
+	/*checkf(OverlayWidgetControllerClass, TEXT("å½“å‰OverlayWidgetControlleræ— æ•ˆ,è¯·åœ¨HUDè“å›¾ä¸­è®¾ç½®"));
+	checkf(OverlayWidgetClass, TEXT("å½“å‰OverlayWidgetClassæ— æ•ˆ,è¯·åœ¨HUDè“å›¾ä¸­è®¾ç½®"));*/
 
-	//ÉùÃ÷CreateWidget·½·¨ ÀàËÆÀ¶Í¼ÀïµÄ²Ù×÷
+	//å£°æ˜CreateWidgetæ–¹æ³• ç±»ä¼¼è“å›¾é‡Œçš„æ“ä½œ
 	UUserWidget* Widget = CreateWidget<UUserWidget>(GetWorld(), OverlayWidgetClass);
 
-	//ÕâÏÂÃæµÄ²Ù×÷ÆäÊµ¶¼ÊÇ¸øOverlayWidget½øĞĞ³õÊ¼»¯·½±ãÖ®ºóController²Ù×÷model²ã
-	//¸øOverlayWidget½øĞĞ¸³Öµ
+	//è¿™ä¸‹é¢çš„æ“ä½œå…¶å®éƒ½æ˜¯ç»™OverlayWidgetè¿›è¡Œåˆå§‹åŒ–æ–¹ä¾¿ä¹‹åControlleræ“ä½œmodelå±‚
+	//ç»™OverlayWidgetè¿›è¡Œèµ‹å€¼
 	OverlayWidget = Cast<UCNUserWidget>(Widget);
 
-	//ÔÚHudÖĞ´´½¨FWidgetControllerParams
+	//åœ¨Hudä¸­åˆ›å»ºFWidgetControllerParams
 	FWidgetControllerParams Params( pc, ps, ASC, AS );
 
-	//´´½¨Ò»¸öOverlayWidgetController²¢½«GetOverlayWidgetController½á¹û´«½øÈ¥
+	//åˆ›å»ºä¸€ä¸ªOverlayWidgetControllerå¹¶å°†GetOverlayWidgetControllerç»“æœä¼ è¿›å»
 
 	UOverlayWidgetController* WidgetController = GetOverlayWidgetController(Params);
-	//ÉèÖÃwidgetController
+	//è®¾ç½®widgetController
 	OverlayWidget->SetWidgetController( WidgetController );
 
-	//ÔÚHUDÖĞ½øĞĞ¹ã²¥ÏàÓ¦²ÎÊı
-	//½«Controller²ãÖĞµÄÊı¾İ¹ã²¥µ½View²ã
+	//åœ¨HUDä¸­è¿›è¡Œå¹¿æ’­ç›¸åº”å‚æ•°
+	//å°†Controllerå±‚ä¸­çš„æ•°æ®å¹¿æ’­åˆ°Viewå±‚
 	OverlayWidgetController->BroadcastInitialValues();
 
 
 
 
-	//½«UIÌí¼Óµ½ÆÁÄ»ÉÏ
+	//å°†UIæ·»åŠ åˆ°å±å¹•ä¸Š
 	Widget->AddToViewport();
 }
 
@@ -59,35 +60,56 @@ UOverlayWidgetController* ACNHUD::GetOverlayWidgetController(const FWidgetContro
 {
 	if (OverlayWidgetController == nullptr)
 	{
-		//ÈôOverlayWidgetControllerÎª¿ÕÔòÖØĞÂ¸øOverlayWidgetController¸³Öµ
+		//è‹¥OverlayWidgetControllerä¸ºç©ºåˆ™é‡æ–°ç»™OverlayWidgetControllerèµ‹å€¼
 		OverlayWidgetController = NewObject<UOverlayWidgetController>(this, OverlayWidgetControllerClass);
 
-		//µ÷ÓÃSetWidgetControllerParams·½·¨²¢½øĞĞ¸³Öµ
+		//è°ƒç”¨SetWidgetControllerParamsæ–¹æ³•å¹¶è¿›è¡Œèµ‹å€¼
 		OverlayWidgetController->SetWidgetControllerParams(Params);
 
-		//»ñÈ¡OverWidgetControllerÔÙ½øĞĞ°ó¶¨ÏàÓ¦ÒÀÀµ
+		//è·å–OverWidgetControllerå†è¿›è¡Œç»‘å®šç›¸åº”ä¾èµ–
 		OverlayWidgetController->BindCallbackToDepencies();
 	}
 
 
 
-	////ÉùÃ÷CreateWidget·½·¨ ÀàËÆÀ¶Í¼ÀïµÄ²Ù×÷
+	////å£°æ˜CreateWidgetæ–¹æ³• ç±»ä¼¼è“å›¾é‡Œçš„æ“ä½œ
 	//UUserWidget* Widget = CreateWidget<UUserWidget>(GetWorld(), OverlayWidgetClass);
 
-	////½«UIÌí¼Óµ½ÆÁÄ»ÉÏ
+	////å°†UIæ·»åŠ åˆ°å±å¹•ä¸Š
 	//Widget->AddToViewport();
 
 	return OverlayWidgetController;
+}
+
+UAttributeMenuWidgetController* ACNHUD::GetAttributeWidgetController(const FWidgetControllerParams& Params)
+{
+	//é€šè¿‡ä¸Šé¢Overlayçš„è·å–æ–¹å¼æ¥ä¸€æ ·çš„è·å–
+	//é¦–å…ˆåˆ¤æ–­Paramsæ˜¯å¦ä¸ºç©º
+	if (AttributeMenuWidgetController == nullptr)
+	{
+		//è‹¥AttributeMenuWidgetControllerä¸ºç©ºåˆ™é‡æ–°ç»™AttributeMenuWidgetControllerèµ‹å€¼
+		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(this, AttributeMenuWidgetControllerClass);
+		//è°ƒç”¨SetWidgetControllerParamsæ–¹æ³•å¹¶è¿›è¡Œèµ‹å€¼
+		AttributeMenuWidgetController->SetWidgetControllerParams(Params);
+
+		//è·å–AttributeMenuWidgetControlleråå†è¿›è¡Œç›¸åº”ç»‘å®š
+		AttributeMenuWidgetController->BindCallbackToDepencies();
+	}
+
+	
+
+	//è¿”å›AttributeMenuWidgetController
+	return AttributeMenuWidgetController;
 }
 
 //void ACNHUD::BeginPlay()
 //{
 //	Super::BeginPlay();
 //
-//	//ÉùÃ÷CreateWidget·½·¨ ÀàËÆÀ¶Í¼ÀïµÄ²Ù×÷
+//	//å£°æ˜CreateWidgetæ–¹æ³• ç±»ä¼¼è“å›¾é‡Œçš„æ“ä½œ
 //	UUserWidget* Widget = CreateWidget<UUserWidget>( GetWorld() , OverlayWidgetClass );
 //
-//	//½«UIÌí¼Óµ½ÆÁÄ»ÉÏ
+//	//å°†UIæ·»åŠ åˆ°å±å¹•ä¸Š
 //	Widget->AddToViewport();
 //
 //}

@@ -4,6 +4,8 @@
 #include "Gameplay/CNGasRpgPlayerState.h"
 #include "AbilitySystemComponent/CNAbilitySystemComponent.h"
 #include "AttributeSet/CNAttributeSet.h"
+//引入虚幻联网头文件
+#include "Net/UnrealNetwork.h"
 
 ACNGasRpgPlayerState::ACNGasRpgPlayerState()
 {
@@ -22,4 +24,18 @@ UAbilitySystemComponent* ACNGasRpgPlayerState::GetAbilitySystemComponent() const
 {
 	//返回自定义的系统技能组件变量
 	return CNAbilitySystemComponent;
+}
+
+void ACNGasRpgPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	//将level数据做一个同步的处理
+	DOREPLIFETIME( ACNGasRpgPlayerState, Level );
+
+	
+}
+
+void ACNGasRpgPlayerState::OnRep_Level(int32 OldLevel)
+{
+	return;
 }

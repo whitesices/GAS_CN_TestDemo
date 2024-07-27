@@ -64,6 +64,19 @@ void ACNGasRpgCharacterPlayer::InitAbilityActorInfo()
 	InitPrimaryAttribute();
 }
 
+int32 ACNGasRpgCharacterPlayer::GetPlayerLevel_Implementation()
+{
+	ACNGasRpgPlayerState* CNPlayerState = GetPlayerState<ACNGasRpgPlayerState>();
+	//检验PlayerState是否有效
+	if (!CNPlayerState)
+	{
+		return 0;
+	}
+
+	//通过PlayerState返回level
+	return CNPlayerState->GetLevel();
+}
+
 //错误 自己多输入一个下划线符号
 //void ACNGasRpgCharacterPlayer::OnRep__PlayerState()
 //{

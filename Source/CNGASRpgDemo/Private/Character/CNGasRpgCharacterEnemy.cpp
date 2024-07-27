@@ -40,6 +40,12 @@ void ACNGasRpgCharacterEnemy::UnHighLight_Implementation()
 	Weapon->SetCustomDepthStencilValue(0);
 }
 
+int32 ACNGasRpgCharacterEnemy::GetPlayerLevel_Implementation()
+{
+	//返回在敌人类中定义的Level变量
+	return Level;
+}
+
 //重载的BeginPlay方法
 void ACNGasRpgCharacterEnemy::BeginPlay()
 {
