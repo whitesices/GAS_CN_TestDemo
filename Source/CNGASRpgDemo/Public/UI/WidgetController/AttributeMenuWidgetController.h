@@ -23,16 +23,19 @@ class CNGASRPGDEMO_API UAttributeMenuWidgetController : public UCNWidgetControll
 
 public:
 	//继承CNWidgetController中的绑定和广播的方法
+	UFUNCTION( BlueprintCallable ) //blueprintable 蓝图可调用
 	virtual void BroadcastInitialValues() override;
 
 	virtual void BindCallbackToDepencies() override;
 
 
+	//声明一个委托变量
 	UPROPERTY( BlueprintAssignable , Category = "GAS|Attributes")
 	FAttributeInfoSignature AttributeInfoDelegate;
 	
 protected:
 
+	//声明一个AttributeInfo的变量
 	UPROPERTY( EditDefaultsOnly )
 	TObjectPtr<UAttributeInfo>  AttributeInfo;
 
