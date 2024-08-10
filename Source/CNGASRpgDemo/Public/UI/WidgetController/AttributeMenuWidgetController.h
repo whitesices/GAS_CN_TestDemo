@@ -32,6 +32,8 @@ public:
 	//声明一个委托变量
 	UPROPERTY( BlueprintAssignable , Category = "GAS|Attributes")
 	FAttributeInfoSignature AttributeInfoDelegate;
+
+	//此条注释是为了 解决git显示无修改的问题
 	
 protected:
 
