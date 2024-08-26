@@ -43,6 +43,9 @@ public:
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 
+	//建立一个Tag映射方便值的查找对应的函数指针获取对应的值
+	TMap< FGameplayTag, FGameplayAttribute(*)() > TagToAttributes;
+
 
 
 public:

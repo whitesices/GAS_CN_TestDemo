@@ -12,6 +12,7 @@
 class UAbilitySystemComponent;
 class UAttributeSet;
 class UGameplayEffect;
+class UGameplayAbility;
 
 //需要继承ability的相应接口
 UCLASS()
@@ -34,6 +35,10 @@ public:
 public:
 	//这里提示无法重写 因此去掉了override
 	virtual int32 GetPlayerLevel_Implementation() ;
+
+	//定义一个增加GA的方法
+	void AddCharacterAbilities();
+
 
 protected:
 	//定义一个初始化主要属性参数的方法
@@ -69,5 +74,11 @@ protected:
 	//新增声明一个必要属性GE的类变量
 	UPROPERTY( EditDefaultsOnly )
 	TSubclassOf< UGameplayEffect > VitalAttributeEffect;
+
+private:
+
+	//声明一个GameplayAbilities来存储之后定义的多个GameplayAbilities
+	UPROPERTY( EditAnywhere , Category = "GameplayAbilites")
+	TArray< TSubclassOf<UGameplayAbility> >  StartAbilites;
 
 };

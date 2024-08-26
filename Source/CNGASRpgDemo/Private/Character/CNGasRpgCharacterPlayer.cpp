@@ -62,6 +62,9 @@ void ACNGasRpgCharacterPlayer::InitAbilityActorInfo()
 	}
 
 	InitPrimaryAttribute();
+
+	//调用添加AddcharacterAbilities方法
+	AddCharacterAbilities();
 }
 
 int32 ACNGasRpgCharacterPlayer::GetPlayerLevel_Implementation()

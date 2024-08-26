@@ -8,6 +8,25 @@ void UCNAbilitySystemComponent::AbilityActorInfoSet()
 	OnGameplayEffectAppliedDelegateToSelf.AddUObject( this , &UCNAbilitySystemComponent::EffectApplied);
 }
 
+
+void UCNAbilitySystemComponent::AddCharacterAbilies(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
+{
+	for (auto AbilityClass : StartupAbilities)
+	{
+		//声明一个中间变量来存储GameplayAbility
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		/*GiveAbility(AbilitySpec);*/
+
+		//Activate GameplayAbility
+		GiveAbilityAndActivateOnce( AbilitySpec);
+	}
+
+
+
+}
+
+
+
 void UCNAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* ASC, const FGameplayEffectSpec& GES, FActiveGameplayEffectHandle AEH)
 {
 	//从GameplayTag容器里获取相应参数

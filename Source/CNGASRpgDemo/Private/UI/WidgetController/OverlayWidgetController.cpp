@@ -6,6 +6,7 @@
 //引入自定义的AttributeSet的方法
 #include "AttributeSet/CNAttributeSet.h"
 
+
 void UOverlayWidgetController::BroadcastInitialValues()
 {
 	//新声明一个UCNAttributeSet来作为中间变量传递值

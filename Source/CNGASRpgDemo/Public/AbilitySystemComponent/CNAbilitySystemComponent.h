@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "CNAbilitySystemComponent.generated.h"
 
+class UGameplayAbility;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer&);
 
@@ -24,6 +25,9 @@ public:
 
 	//定义相应委托
 	FEffectAssetTags EffectAssetTags;
+
+	//定义一个增加技能的方法
+	void AddCharacterAbilies( const TArray<TSubclassOf<UGameplayAbility>> &StartupAbilities);
 
 protected:
 	void EffectApplied(UAbilitySystemComponent* ASC, const FGameplayEffectSpec& GES, FActiveGameplayEffectHandle AEH);

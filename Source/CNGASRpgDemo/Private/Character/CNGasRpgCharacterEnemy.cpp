@@ -58,4 +58,7 @@ void ACNGasRpgCharacterEnemy::BeginPlay()
 	Cast<UCNAbilitySystemComponent>(CNAbilitySystemComponent)->AbilityActorInfoSet();
 	//在子类的beginplay中去调用
 	InitPrimaryAttribute();
+
+	//调用添加AddcharacterAbilities方法
+	AddCharacterAbilities();
 }

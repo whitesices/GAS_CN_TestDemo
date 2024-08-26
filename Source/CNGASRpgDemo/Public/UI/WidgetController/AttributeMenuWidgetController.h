@@ -9,9 +9,10 @@
 
 struct FCNAttributeInfo;
 class UAttributeInfo;
+//class FGameplayAttribute;
 
 //新建一个委托
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FAttributeInfoSignature, const FCNAttributeInfo&, Info) ;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FAttributeInfoSignature, const FCNAttributeInfo& , Info) ;
 
 /**
  * 
@@ -33,7 +34,8 @@ public:
 	UPROPERTY( BlueprintAssignable , Category = "GAS|Attributes")
 	FAttributeInfoSignature AttributeInfoDelegate;
 
-	//此条注释是为了 解决git显示无修改的问题
+	////此条注释是为了 解决git显示无修改的问题
+	//void BroadCastAttributeInfoCN(const FGameplayTag& Gaemplay, FGameplayAttribute GameplayAttribute);
 	
 protected:
 
@@ -41,4 +43,8 @@ protected:
 	UPROPERTY( EditDefaultsOnly )
 	TObjectPtr<UAttributeInfo>  AttributeInfo;
 
+	////新声明一个广播AttributeInfo参数的方法
+	//void BroadcastAttributeInfoByCN(const FGameplayTag& GameplayTag, FGameplayAttribute GameplayAttribute, UCNAttributeSet* AS);
+
+	
 };

@@ -5,6 +5,7 @@
 #include "AbilitySystemComponent.h"
 //引入虚幻联网头文件
 #include "Net/UnrealNetwork.h"
+#include "AbilitySystemComponent/AuraGameplayTags.h"
 
 UCNAttributeSet::UCNAttributeSet()
 {
@@ -12,6 +13,30 @@ UCNAttributeSet::UCNAttributeSet()
 	/*InitMaxHealth(150.f);*/
 	InitMana(50.f);
 	/*InitMaxMana(100.f);*/
+
+	//对自己定义的GameplayTag进行初始化
+	const FAuraGameplayTags& CNGameplayTags = FAuraGameplayTags::Get();
+
+	//配置主要属性
+	TagToAttributes.Add(CNGameplayTags.Attribute_Primary_Strength, GetStrengthAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Primary_Intelligence, GetIntelligenceAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Primary_Resilience, GetResilienseAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Primary_Vigor, GetVigorAttribute);
+
+	//配置次要属性
+	TagToAttributes.Add(CNGameplayTags.Attribute_Secondary_Armor, GetArmorAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Secondary_ArmorPenetration, GetArmorPenetrationAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Secondary_BlockChance, GetBlockChanceAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Secondary_CriticalHitChance, GetCriticalHitChanceAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Secondary_CriticalHitDamage, GetCriticalHitDamageAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Secondary_CriticalHitResistance, GetCriticalHitChanceAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Secondary_HealthRegeneration, GetHealthRegenerationAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Secondary_ManaRegeneration, GetManaRegenerationAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Secondary_MaxHealth, GetMaxHealthAttribute);
+	TagToAttributes.Add(CNGameplayTags.Attribute_Secondary_MaxMana, GetMaxManaAttribute);
+
+	
+
 }
 
 void UCNAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

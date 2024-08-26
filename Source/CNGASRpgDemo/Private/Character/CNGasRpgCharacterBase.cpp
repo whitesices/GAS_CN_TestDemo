@@ -6,6 +6,9 @@
 //引入AttributeSet头文件
 #include "AttributeSet.h"
 
+//引入自定义AbilityComponent的头文件
+#include "AbilitySystemComponent/CNAbilitySystemComponent.h"
+
 // Sets default values
 ACNGasRpgCharacterBase::ACNGasRpgCharacterBase()
 {
@@ -34,6 +37,18 @@ UAbilitySystemComponent* ACNGasRpgCharacterBase::GetAbilitySystemComponent() con
 int32 ACNGasRpgCharacterBase::GetPlayerLevel_Implementation()
 {
 	return 0;
+}
+
+void ACNGasRpgCharacterBase::AddCharacterAbilities()
+{
+	//判断是否在服务端  ， 与UE的网络同步有关系 毕竟这里做的单机即把自己本身当作server
+	if (!HasAuthority())
+	{
+		return;
+	}
+
+	//调用执行相应的GameplayAbility
+	CastChecked<UCNAbilitySystemComponent>(GetAbilitySystemComponent())->AddCharacterAbilies(StartAbilites);
 }
 
 //定义一个主要属性参数的方法
