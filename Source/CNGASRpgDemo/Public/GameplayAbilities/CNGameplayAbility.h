@@ -6,6 +6,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "CNGameplayAbility.generated.h"
 
+
 /**
  * 
  */

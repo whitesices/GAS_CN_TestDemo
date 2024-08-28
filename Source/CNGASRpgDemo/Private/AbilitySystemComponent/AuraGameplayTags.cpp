@@ -64,4 +64,12 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 
 	GameplayTags.Attribute_Secondary_MaxMana = UGameplayTagsManager::Get()
 		.AddNativeGameplayTag(FName("Attribute.Secondary.MaxMana") , FString(TEXT("最大魔法值") ) );
+
+	//输入标签初始化
+	GameplayTags.InputTag_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag( FName("InputTag.LMB") , FString(TEXT("鼠标左键")));
+	GameplayTags.InputTag_RMB = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.RMB"), FString(TEXT("鼠标右键")));
+	GameplayTags.InputTag_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.1"), FString(TEXT("数字1")));
+	GameplayTags.InputTag_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.2") , FString(TEXT("数字2")));
+	GameplayTags.InputTag_3 = UGameplayTagsManager::Get().AddNativeGameplayTag( FName("InputTag.3"), FString(TEXT("数字3")));
+	GameplayTags.InputTag_4 = UGameplayTagsManager::Get().AddNativeGameplayTag( FName("InputTag.4"), FString(TEXT("数字4")));
 }
